@@ -9,15 +9,12 @@ from PIL import ImageTk,Image
 def submit_form():
         # set the variables (getting the entry data)
     # positions of the flags
-    pos_1 = [0,0]
-    pos_2 = [24,24]
-    draw = 1
-    # pos_1 = [int(pos_x_1.get())-1, int(pos_y_1.get())-1]
-    # pos_2 = [int(pos_x_2.get())-1, int(pos_y_2.get())-1]
-    # draw = var1.get()
+    draw = 0
+    pos_1 = [int(pos_x_1.get())-1, int(pos_y_1.get())-1]
+    pos_2 = [int(pos_x_2.get())-1, int(pos_y_2.get())-1]
+    draw = var1.get()
     # close the form window
-    # root.destroy()
-
+    root.destroy()
 
 
         # functions
@@ -47,63 +44,97 @@ def submit_form():
                 elif gride[i][j] == 5:
                     pygame.draw.rect(window,(0,0,255), (i*20,j*20,20,20))
                     pygame.display.update()
+                elif gride[i][j] == 7:
+                    pygame.draw.rect(window,(0,255,255), (i*20,j*20,20,20))
+                    pygame.display.update()
     
     # draw the new rectangle
-    def new_rect(actual_pos_x, actual_pos_y):
-        if gride[actual_pos_x][actual_pos_y] == 0 or gride[actual_pos_x][actual_pos_y] == 5:
-            gride[actual_pos_x][actual_pos_y] = 4
-            
-        if gride[actual_pos_x+1][actual_pos_y] == 0 and gride[actual_pos_x+1][actual_pos_y] != 4:
-            gride[actual_pos_x+1][actual_pos_y] = 5
-        
-        if gride[actual_pos_x-1][actual_pos_y] == 0 and gride[actual_pos_x-1][actual_pos_y] != 4:
-            gride[actual_pos_x-1][actual_pos_y] = 5
-            
-        if gride[actual_pos_x+1][actual_pos_y+1] == 0 and gride[actual_pos_x+1][actual_pos_y+1] != 4:
-            gride[actual_pos_x+1][actual_pos_y+1] = 5
-            
-        if gride[actual_pos_x][actual_pos_y-1] == 0 and gride[actual_pos_x][actual_pos_y-1] != 4:
-            gride[actual_pos_x][actual_pos_y-1] = 5
-        
-        if gride[actual_pos_x][actual_pos_y+1] == 0 and gride[actual_pos_x][actual_pos_y+1] != 4:
-            gride[actual_pos_x][actual_pos_y+1] = 5
-            
-        if gride[actual_pos_x -1][actual_pos_y+1] == 0 and gride[actual_pos_x -1][actual_pos_y+1] != 4:
-            gride[actual_pos_x - 1][actual_pos_y+1] = 5
-            
-        if gride[actual_pos_x + 1][actual_pos_y-1] == 0 and gride[actual_pos_x + 1][actual_pos_y-1] != 4:
-            gride[actual_pos_x + 1][actual_pos_y-1] = 5
-            
-        
-        
+    def new_rect(actual_pos_x, actual_pos_y, draw, pos_1, pos_2):
+        if draw == 1 and gride[actual_pos_x][actual_pos_y] == 0 or gride[actual_pos_x][actual_pos_y] == 5:
+            gride[actual_pos_x][actual_pos_y] = 4      
+        if actual_pos_x == 0 and actual_pos_y != 24:
+            # front
+            if gride[actual_pos_x+1][actual_pos_y] == 0 and gride[actual_pos_x+1][actual_pos_y] != 4:
+                gride[actual_pos_x+1][actual_pos_y] = 5
+            # down
+            if gride[actual_pos_x][actual_pos_y+1] == 0 and gride[actual_pos_x][actual_pos_y+1] != 4:
+                gride[actual_pos_x][actual_pos_y+1] = 5
+            # front/down
+            if gride[actual_pos_x+1][actual_pos_y+1] == 0 and gride[actual_pos_x][actual_pos_y+1] != 4:
+                gride[actual_pos_x+1][actual_pos_y+1] = 5
+        elif actual_pos_x == 24 and actual_pos_y == 24:
+            # up
+            if gride[actual_pos_x][actual_pos_y-1] == 0 and gride[actual_pos_x][actual_pos_y-1] != 4:
+                gride[actual_pos_x][actual_pos_y-1] = 5
+            # back
+            if gride[actual_pos_x-1][actual_pos_y] == 0 and gride[actual_pos_x-1][actual_pos_y] != 4:
+                gride[actual_pos_x-1][actual_pos_y] = 5
+        elif actual_pos_x == 24:
+            # down
+            if gride[actual_pos_x][actual_pos_y-1] == 0 and gride[actual_pos_x][actual_pos_y+1] != 4:
+                gride[actual_pos_x][actual_pos_y-1] = 5
+        elif actual_pos_y == 24:
+            # front
+            if gride[actual_pos_x+1][actual_pos_y] == 0 and gride[actual_pos_x+1][actual_pos_y] != 4:
+                gride[actual_pos_x+1][actual_pos_y] = 5
+        else:
+            if pos_1[1] < pos_2[1]:
+                # front
+                if gride[actual_pos_x+1][actual_pos_y] == 0 and gride[actual_pos_x+1][actual_pos_y] != 4:
+                    gride[actual_pos_x+1][actual_pos_y] = 5
+                # down
+                if gride[actual_pos_x][actual_pos_y+1] == 0 and gride[actual_pos_x][actual_pos_y+1] != 4:
+                    gride[actual_pos_x][actual_pos_y+1] = 5
+                # back
+                if gride[actual_pos_x-1][actual_pos_y] == 0 and gride[actual_pos_x][actual_pos_y+1] != 4:
+                    gride[actual_pos_x-1][actual_pos_y] = 5
+            else:
+                # front
+                if gride[actual_pos_x+1][actual_pos_y] == 0 and gride[actual_pos_x+1][actual_pos_y] != 4:
+                    gride[actual_pos_x+1][actual_pos_y] = 5
+                # down
+                if gride[actual_pos_x][actual_pos_y+1] == 0 and gride[actual_pos_x][actual_pos_y+1] != 4:
+                    gride[actual_pos_x][actual_pos_y+1] = 5
+                # up
+                if gride[actual_pos_x][actual_pos_y-1] == 0 and gride[actual_pos_x][actual_pos_y-1] != 4:
+                    gride[actual_pos_x][actual_pos_y-1] = 5
+                # back
+                if gride[actual_pos_x-1][actual_pos_y] == 0 and gride[actual_pos_x][actual_pos_y+1] != 4:
+                    gride[actual_pos_x-1][actual_pos_y] = 5
+
     # find the path
     def find_path(pos_1, pos_2, draw, gride):
-        print(draw)
         actual_pos_x = pos_1[0]
-        actual_pos_y = pos_1[1]
+        actual_pos_y = pos_1[1] 
+        new_rect(actual_pos_x, actual_pos_y, draw, pos_1, pos_2)
+        draw_walls_flags(gride)
+        found = False
         
-        while actual_pos_x != pos_2[0] and actual_pos_y != pos_2[1]:
-            if gride[actual_pos_x + 1][actual_pos_y + 1] != 1:
-                actual_pos_x += 1
-                actual_pos_y += 1
-                if actual_pos_x <= 25:
-                    new_rect(actual_pos_x, actual_pos_y)
-                else:
-                    actual_pos_y += 1
-                    
-                if actual_pos_y <= 25:
-                    new_rect(actual_pos_x, actual_pos_y)
-                else:
-                    actual_pos_x += random.choice([-1, 1])
-            else:
-                actual_pos_x -= 1
-                actual_pos_y += 1
-                new_rect(actual_pos_x, actual_pos_y)
-            draw_walls_flags(gride)
-                
-            print(actual_pos_x, actual_pos_y)
+        while not found:
+            blue_sqares_x = []
+            blue_sqares_y = []
             
+            for i,j in enumerate(gride):
+                for k,l in enumerate(j):
+                    if l==5 and l != 1:
+                        blue_sqares_x.append(i)
+                        blue_sqares_y.append(k)
+
+            for i in range(0, len(blue_sqares_x)):
+                actual_pos_x = blue_sqares_x[i]
+                actual_pos_y = blue_sqares_y[i]
+                new_rect(actual_pos_x, actual_pos_y, draw, pos_1, pos_2)
+                if actual_pos_x == (pos_2[0]-1) and actual_pos_y == (pos_2[1]-1):
+                    found = True
+                    gride[actual_pos_x+1][actual_pos_y] = 2
+                    gride[actual_pos_x][actual_pos_y+1] = 2
+                    if pos_2[0] <= 23:
+                        gride[actual_pos_x+2][actual_pos_y+1] = 2
+                        draw_walls_flags(gride)
+                    break
+            draw_walls_flags(gride)    
         return gride
+    
     if pos_1[0] >= 0 and pos_1[0] <= 25 and  pos_1[1] >= 0 and pos_1[1] <= 25 and pos_2[0] >= 0 and pos_2[0] <= 25 and pos_2[1] >= 0 and pos_2[1] <= 25:
         # variables
         running = True
@@ -162,7 +193,10 @@ def submit_form():
                 if pressed1 and draw_fences and mouse_x < 500 and mouse_y < 500:
                     mouse_pos_x = mouse_x // 20
                     mouse_pos_y = mouse_y // 20
-                    gride[mouse_pos_x][mouse_pos_y] = 1
+                    if mouse_pos_x == pos_2[0] and mouse_pos_y == pos_2[1]:
+                        pass
+                    else:
+                        gride[mouse_pos_x][mouse_pos_y] = 1
                     draw_walls_flags(gride)
                 # if window close
                 elif event.type == pygame.QUIT:
@@ -177,73 +211,72 @@ def submit_form():
                     # find the path
                     gride = find_path(pos_1, pos_2, draw, gride)
                     draw_walls_flags(gride)
-
+                
 if __name__ == "__main__":
-    submit_form()
-    # # load the Form window 
-    # root = tk.Tk()
-    # root.title("Form")
-    # root.geometry('500x600')
-    # var1 = tk.IntVar()
+    # load the Form window 
+    root = tk.Tk()
+    root.title("Form")
+    root.geometry('500x600')
+    var1 = tk.IntVar()
 
-    # # picture gride 
-    # canvas = Canvas(root, width = 400, height = 400)  
-    # canvas.pack()  
-    # img = ImageTk.PhotoImage(Image.open("gride.png"))  
-    # canvas.create_image(10, 10, anchor=NW, image=img) 
+    # picture gride 
+    canvas = Canvas(root, width = 400, height = 400)  
+    canvas.pack()  
+    img = ImageTk.PhotoImage(Image.open("gride.png"))  
+    canvas.create_image(10, 10, anchor=NW, image=img) 
 
-    # # for the text (to hide when it's clicked)
-    # class EntryWithPlaceholder(tk.Entry):
-    #     def __init__(self, master=None, placeholder="PLACEHOLDER", color='grey'):
-    #         super().__init__(master)
+    # for the text (to hide when it's clicked)
+    class EntryWithPlaceholder(tk.Entry):
+        def __init__(self, master=None, placeholder="PLACEHOLDER", color='grey'):
+            super().__init__(master)
 
-    #         self.placeholder = placeholder
-    #         self.placeholder_color = color
-    #         self.default_fg_color = self['fg']
+            self.placeholder = placeholder
+            self.placeholder_color = color
+            self.default_fg_color = self['fg']
 
-    #         self.bind("<FocusIn>", self.foc_in)
-    #         self.bind("<FocusOut>", self.foc_out)
+            self.bind("<FocusIn>", self.foc_in)
+            self.bind("<FocusOut>", self.foc_out)
 
-    #         self.put_placeholder()
+            self.put_placeholder()
 
-    #     def put_placeholder(self):
-    #         self.insert(0, self.placeholder)
-    #         self['fg'] = self.placeholder_color
+        def put_placeholder(self):
+            self.insert(0, self.placeholder)
+            self['fg'] = self.placeholder_color
 
-    #     def foc_in(self, *args):
-    #         if self['fg'] == self.placeholder_color:
-    #             self.delete('0', 'end')
-    #             self['fg'] = self.default_fg_color
+        def foc_in(self, *args):
+            if self['fg'] == self.placeholder_color:
+                self.delete('0', 'end')
+                self['fg'] = self.default_fg_color
 
-    #     def foc_out(self, *args):
-    #         if not self.get():
-    #             self.put_placeholder() 
+        def foc_out(self, *args):
+            if not self.get():
+                self.put_placeholder() 
     
-    # # entry 1 with text
-    # label = Label( root, text="first position:")
-    # label.pack()
-    # pos_x_1 = EntryWithPlaceholder(root, "x:")
-    # pos_y_1 = EntryWithPlaceholder(root, "y:")
-    # pos_x_1.pack()
-    # pos_y_1.pack()
+    # entry 1 with text
+    label = Label( root, text="first position:")
+    label.pack()
+    pos_x_1 = EntryWithPlaceholder(root, "x:")
+    pos_y_1 = EntryWithPlaceholder(root, "y:")
+    pos_x_1.pack()
+    pos_y_1.pack()
     
     
-    # # entry2 with text
-    # label = Label( root, text="second position:")
-    # label.pack()
-    # pos_x_2 = EntryWithPlaceholder(root, "x:")
-    # pos_y_2 = EntryWithPlaceholder(root, "y:")
-    # pos_x_2.pack()
-    # pos_y_2.pack()  
+    # entry2 with text
+    label = Label( root, text="second position:")
+    label.pack()
+    pos_x_2 = EntryWithPlaceholder(root, "x:")
+    pos_y_2 = EntryWithPlaceholder(root, "y:")
+    pos_x_2.pack()
+    pos_y_2.pack()  
 
-    # # check box
-    # check = tk.Checkbutton(root, text='draw',variable=var1, onvalue=1, offvalue=0)
-    # check.pack()
+    # check box
+    check = tk.Checkbutton(root, text='draw',variable=var1, onvalue=1, offvalue=0)
+    check.pack()
 
-    # # subtmit button
-    # button = Button(root, text="Valid", command=submit_form)
-    # button.pack()
+    # subtmit button
+    button = Button(root, text="Valid", command=submit_form)
+    button.pack()
 
-    # # show the window
-    # root.mainloop()
+    # show the window
+    root.mainloop()
 
